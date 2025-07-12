@@ -65,4 +65,8 @@ Não é permitido uso de serviços replicados – isso dificulta a verificação
 
 * Uma resposta HTTP 429 - Too Many Requests pode vir acompanhada (na Rinha vem) de um Header "Retry-After: X" – onde X é um intervalo em segundos. Depois desse intervalo, você pode fazer a requisição novamente.
 
+## Tests
+
+Guide: https://github.com/zanfranceschi/rinha-de-backend-2025/blob/main/rinha-test/MINIGUIA.md
+
 ![rinha_arch_img](docs/rinha_arch.png)

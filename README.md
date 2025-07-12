@@ -63,5 +63,6 @@ Não é permitido modo privileged.
 Não é permitido uso de serviços replicados – isso dificulta a verificação dos recursos usados.
 
 
-
 * Uma resposta HTTP 429 - Too Many Requests pode vir acompanhada (na Rinha vem) de um Header "Retry-After: X" – onde X é um intervalo em segundos. Depois desse intervalo, você pode fazer a requisição novamente.
+
+![rinha_arch_img](docs/rinha_arch.png)

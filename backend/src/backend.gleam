@@ -21,9 +21,7 @@ pub fn main() {
           let resp = httpc.send(raw_req)
 
           case resp {
-            Ok(n) -> {
-              io.println("====" <> n.body <> "====")
-            
+            Ok(_n) -> {
               response.new(200)
               |> response.set_body(mist.Bytes(bytes_tree.new()))
             }
@@ -37,6 +35,13 @@ pub fn main() {
           response.new(200)
           |> response.set_body(mist.Bytes(bytes_tree.new()))
         }
+        // POST
+        // This route is not basic as the others, it is here now (before the others are minimally completed)
+        // because it is needed is order to run the tests
+        ["purge-payments"] -> {
+          response.new(200)
+          |> response.set_body(mist.Bytes(bytes_tree.new()))
+        }
         _ -> {
           response.new(404)
           |> response.set_body(mist.Bytes(bytes_tree.new()))
@@ -47,7 +52,7 @@ pub fn main() {
   |> mist.new
   |> mist.bind("localhost")
   |> mist.with_ipv6
-  |> mist.port(3000)
+  |> mist.port(9999)
   |> mist.start
     
   process.sleep_forever()

@@ -1,5 +1,4 @@
 import gleam/io
-import gleam/result
 import gleam/httpc
 import gleam/bytes_tree
 import gleam/erlang/process
@@ -23,7 +22,7 @@ pub fn main() {
 
           case resp {
             Ok(n) -> {
-              io.println(n.body)
+              io.println("====" <> n.body <> "====")
             
               response.new(200)
               |> response.set_body(mist.Bytes(bytes_tree.new()))

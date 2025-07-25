@@ -1,3 +1,4 @@
+import gleam/string
 import gleam/io
 import gleam/httpc
 import gleam/bytes_tree
@@ -17,18 +18,8 @@ pub fn main() {
       case request.path_segments(req) {
         // POST
         ["payments"] -> {
-          let assert Ok(raw_req) = request.to("localhost:8001/payments")
-          let resp = httpc.send(raw_req)
-
-          case resp {
-            Ok(_n) -> {
-              response.new(200)
-              |> response.set_body(mist.Bytes(bytes_tree.new()))
-            }
-            Error(_) -> {
-              error
-            }
-          }
+            response.new(200)
+            |> response.set_body(mist.Bytes(bytes_tree.new()))
         }
         // GET
         ["payments-summary"] -> {

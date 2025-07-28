@@ -66,26 +66,6 @@ fn payment_routes(router: Router) -> Router {
       |> response.set_body(mist.Bytes(bytes_tree.new()))
     },
   )
-  |> post(
-    "payments",
-    fn(_req: Request(Connection), _params: Dict(String, String)) -> Response(
-      mist.ResponseData,
-    ) {
-      response.new(200)
-      |> response.set_body(mist.Bytes(bytes_tree.new()))
-    },
-  )
-  // This route is not basic as the others, it is here now (before the others are minimally completed)
-  // because it is needed is order to run the tests
-  |> post(
-    "payments",
-    fn(_req: Request(Connection), _params: Dict(String, String)) -> Response(
-      mist.ResponseData,
-    ) {
-      response.new(200)
-      |> response.set_body(mist.Bytes(bytes_tree.new()))
-    },
-  )
 }
 
 // ================================================================================================================================

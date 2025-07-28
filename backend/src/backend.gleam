@@ -57,7 +57,7 @@ fn payment_routes(router: Router) -> Router {
       |> response.set_body(mist.Bytes(bytes_tree.new()))
     },
   )
-  |> post(
+  |> get(
     "payments-summary",
     fn(_req: Request(Connection), _params: Dict(String, String)) -> Response(
       mist.ResponseData,

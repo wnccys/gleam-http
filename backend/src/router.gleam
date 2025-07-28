@@ -43,8 +43,7 @@ pub fn add_route(
 pub fn get(
   router: Router,
   route_path: String,
-  handler: fn(Request(Connection), Dict(String, String)) ->
-    Response(ResponseData),
+  handler: RouteHandlerFn,
 ) -> Router {
   add_route(router, http.Get, route_path, handler)
 }
@@ -52,8 +51,7 @@ pub fn get(
 pub fn post(
   router: Router,
   route_path: String,
-  handler: fn(Request(Connection), Dict(String, String)) ->
-    Response(ResponseData),
+  handler: RouteHandlerFn,
 ) -> Router {
   add_route(router, http.Post, route_path, handler)
 }
@@ -61,8 +59,7 @@ pub fn post(
 pub fn put(
   router: Router,
   route_path: String,
-  handler: fn(Request(Connection), Dict(String, String)) ->
-    Response(ResponseData),
+  handler: RouteHandlerFn,
 ) -> Router {
   add_route(router, http.Put, route_path, handler)
 }
@@ -70,8 +67,7 @@ pub fn put(
 pub fn delete(
   router: Router,
   route_path: String,
-  handler: fn(Request(Connection), Dict(String, String)) ->
-    Response(ResponseData),
+  handler: RouteHandlerFn,
 ) -> Router {
   add_route(router, http.Delete, route_path, handler)
 }

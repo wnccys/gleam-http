@@ -6,6 +6,41 @@ import gleam/io
 import gleam/erlang/atom
 import gleam/dynamic.{type Dynamic}
 
+// Base FFI erlang compat types
+
+type ErlHttpOption {
+  Ssl(List(ErlSslOption))
+  Autoredirect(Bool)
+  Timeout(Int)
+}
+
+type BodyFormat {
+  Binary
+}
+
+type ErlOption {
+  BodyFormat(BodyFormat)
+  SocketOpts(List(SocketOpt))
+}
+
+type SocketOpt {
+  Ipfamily(Inet6fb4)
+
+}
+
+
+type Inet6fb4 {
+  Inet6fb4
+}
+
+type ErlSslOption {
+  Verify(ErlVerifyOption)
+}
+
+type ErlVerifyOption {
+  VerifyNone
+}
+
 /// Erlang FFI def
 @external(erlang, "httpc", "request")
 fn get_erl(

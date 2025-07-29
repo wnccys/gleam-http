@@ -81,7 +81,7 @@ fn get(client: HttpClient) -> Result(HttpOk, HttpError) {
 
 // WIP
 fn post(client: HttpClient, body: String) -> Result(HttpOk, HttpError) {
-  post_erl(atom.create("post"), #(client.to, client.headers, "cnt-type","body"), [], [])
+  post_erl(atom.create("post"), #(client.to, client.headers, "cnt-type", body), [], [])
 }
 
 fn new() -> HttpClient {
@@ -99,6 +99,9 @@ fn set_header(client: HttpClient, key: String, value: String) -> HttpClient {
 pub fn main() {
   let client = new()
   |> set_header("accept", "application/vnd.hmrc.1.0+json")
+  |> set_header("content-type", "text/html")
+  // change compat test
+  |> set_header("content-type", "application/json")
   |> to("https://test-api.service.hmrc.gov.uk/hello/world")
   |> get()
 

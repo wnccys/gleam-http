@@ -28,7 +28,6 @@ type SocketOpt {
 
 }
 
-
 type Inet6fb4 {
   Inet6fb4
 }
@@ -49,9 +48,9 @@ fn get_erl(
   // [Url, Headers]
   request: #(Charlist, List(#(Charlist, Charlist))),
   // Omitted, no need
-  http_options: List(Dynamic),
+  http_options: List(ErlHttpOption),
   // Omitted, no need
-  options: List(Dynamic)
+  options: List(ErlOption)
 ) -> Result(HttpOk, HttpError)
 
 @external(erlang, "httpc", "request")
@@ -104,6 +103,19 @@ pub fn main() {
   |> get()
 
   io.println(string.inspect(client))
+}
+
+pub fn configure() -> Configuration {
+  Builder(verify_tls: True, follow_redirects: False, timeout: 30_000)
+}
+
+pub opaque type Configuration {
+  Builder(
+    // Default to true, unless explicitly set
+    verify_tls: Bool,
+    follow_redirects: Bool,
+    timeout: Int,
+  )
 }
 
 // ================================================================================================================================

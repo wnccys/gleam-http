@@ -1,12 +1,10 @@
 /// OUR OWN GLEAM HTTP CLIENT
 
 import gleam/result
-import gleam/bit_array
 import gleam/list
 import gleam/http
 import gleam/http/response.{type Response, Response}
 import gleam/erlang/charlist.{type Charlist}
-import gleam/io
 
 // Base FFI erlang compat types
 pub type ErlHttpOption {

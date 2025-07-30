@@ -38,6 +38,23 @@ type ErlVerifyOption {
   VerifyNone
 }
 
+pub type ConnectError {
+  Posix(code: String)
+  TlsAlert(code: String, detail: String)
+}
+
+// ((version, status, status), headers, body)
+type HttpOk = #(#(Charlist, Int, Charlist), List(#(Charlist, Charlist)), BitArray)
+
+pub type HttpError {
+  /// The response body contained non-UTF-8 data, but UTF-8 data was expected.
+  InvalidUtf8Response
+  /// It was not possible to connect to the host.
+  FailedToConnect(ip4: ConnectError, ip6: ConnectError)
+  /// The response was not received within the configured timeout period.
+  ResponseTimeout
+}
+
 /// Erlang FFI def
 @external(erlang, "httpc", "request")
 fn get_erl(

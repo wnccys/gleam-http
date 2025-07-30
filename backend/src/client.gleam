@@ -135,7 +135,21 @@ fn post(client: HttpClient, body: String) -> Result(Response(BitArray), HttpErro
 }
 
 fn new() -> HttpClient {
-  HttpClient(charlist.from_string(""), [])
+  let config = configure()
+
+  let erl_http_options = [
+    Autoredirect(config.follow_redirects),
+    Timeout(config.timeout),
+  ]
+  let erl_options = [BodyFormat(Binary), SocketOpts([Ipfamily(Inet6fb4)])]
+
+  HttpClient(
+    charlist.from_string(""),
+    config,
+    [],
+    erl_http_options,
+    erl_options
+  )
 }
 
 fn to(client: HttpClient, url: String) -> HttpClient {
@@ -144,6 +158,14 @@ fn to(client: HttpClient, url: String) -> HttpClient {
 
 fn set_header(client: HttpClient, key: String, value: String) -> HttpClient {
   HttpClient(..client, headers: [#(charlist.from_string(key), charlist.from_string(value)), ..client.headers])
+}
+
+// fn set_http_option(client: HttpClient, opt: ErlHttpOption) -> HttpClient {}
+// fn set_req_option(client: HttpClient, opt: ErlOption) -> HttpClient {}
+
+fn string_headers(header: #(Charlist, Charlist)) -> #(String, String) {
+  let #(k, v) = header
+  #(charlist.to_string(k), charlist.to_string(v))
 }
 
 pub fn main() {

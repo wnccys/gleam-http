@@ -9,34 +9,34 @@ import gleam/erlang/charlist.{type Charlist}
 import gleam/io
 
 // Base FFI erlang compat types
-type ErlHttpOption {
+pub type ErlHttpOption {
   Ssl(List(ErlSslOption))
   Autoredirect(Bool)
   Timeout(Int)
 }
 
-type BodyFormat {
+pub type BodyFormat {
   Binary
 }
 
-type ErlOption {
+pub type ErlOption {
   BodyFormat(BodyFormat)
   SocketOpts(List(SocketOpt))
 }
 
-type SocketOpt {
+pub type SocketOpt {
   Ipfamily(Inet6fb4)
 }
 
-type Inet6fb4 {
+pub type Inet6fb4 {
   Inet6fb4
 }
 
-type ErlSslOption {
+pub type ErlSslOption {
   Verify(ErlVerifyOption)
 }
 
-type ErlVerifyOption {
+pub type ErlVerifyOption {
   VerifyNone
 }
 
@@ -70,7 +70,7 @@ fn post_erl(
   options: List(ErlOption)
 ) -> Result(HttpOk, HttpError)
 
-type HttpClient {
+pub type HttpClient {
   HttpClient(
     to: Charlist,
     config: Configuration,
@@ -95,7 +95,7 @@ pub fn configure() -> Configuration {
   Builder(verify_tls: True, follow_redirects: False, timeout: 15_000)
 }
 
-fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {
+pub fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {
   let assert Ok(resp) = 
     get_erl(
       http.Get,
@@ -108,7 +108,7 @@ fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {
   Ok(Response(status, list.map(headers, string_headers), body))
 }
 
-fn post(client: HttpClient, body: String) -> Result(Response(BitArray), HttpError) {
+pub fn post(client: HttpClient, body: String) -> Result(Response(BitArray), HttpError) {
     let content_type = 
         list.find(
           client.headers,
@@ -132,7 +132,7 @@ fn post(client: HttpClient, body: String) -> Result(Response(BitArray), HttpErro
     Ok(Response(status, list.map(headers, string_headers), body))
 }
 
-fn new() -> HttpClient {
+pub fn new() -> HttpClient {
   let config = configure()
 
   let erl_http_options = [
@@ -150,11 +150,11 @@ fn new() -> HttpClient {
   )
 }
 
-fn to(client: HttpClient, url: String) -> HttpClient {
+pub fn to(client: HttpClient, url: String) -> HttpClient {
   HttpClient(..client, to: charlist.from_string(url))
 }
 
-fn set_header(client: HttpClient, key: String, value: String) -> HttpClient {
+pub fn set_header(client: HttpClient, key: String, value: String) -> HttpClient {
   HttpClient(..client, headers: [#(charlist.from_string(key), charlist.from_string(value)), ..client.headers])
 }
 
@@ -164,36 +164,4 @@ fn set_header(client: HttpClient, key: String, value: String) -> HttpClient {
 fn string_headers(header: #(Charlist, Charlist)) -> #(String, String) {
   let #(k, v) = header
   #(charlist.to_string(k), charlist.to_string(v))
-}
-
-// ================================================================================================================================
-// TEST FUNCTIONS - Inspirado nos tests do spibola 
-//  ================================================================================================================================
-
-pub fn main() {
-  req_get()
-  req_post()
-}
-
-fn req_get() {
-  let assert Ok(resp) = new()
-  |> set_header("accept", "application/vnd.hmrc.1.0+json")
-  |> set_header("content-type", "application/json")
-  |> to("https://test-api.service.hmrc.gov.uk/hello/world")
-  |> get()
-
-  let assert Ok(body) = bit_array.to_string(resp.body)
-
-  io.println(body)
-}
-
-fn req_post() {
-  let assert Ok(resp) = new()
-  |> set_header("accept", "*/*")
-  |> set_header("content-type", "application/json")
-  |> to("https://test-api.service.hmrc.gov.uk/hello/world")
-  |> post("{ \"hello\": \"world\" }")
-
-  let assert Ok(body) = bit_array.to_string(resp.body)
-  io.println(body)
 }

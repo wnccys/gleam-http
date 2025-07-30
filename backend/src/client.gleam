@@ -58,30 +58,19 @@ pub type HttpError {
 /// Erlang FFI def
 @external(erlang, "httpc", "request")
 fn get_erl(
-  // In our case [get | post]
-  method: atom.Atom,
-  // [Url, Headers]
+  method: http.Method,
   request: #(Charlist, List(#(Charlist, Charlist))),
-  // Omitted, no need
   http_options: List(ErlHttpOption),
-  // Omitted, no need
   options: List(ErlOption)
 ) -> Result(HttpOk, HttpError)
 
 @external(erlang, "httpc", "request")
 fn post_erl(
-  // In our case [get | post]
-  method: atom.Atom,
-  // [Url, Headers]
-  request: #(Charlist, List(#(Charlist, Charlist)), String, String),
-  // Omitted, no need
-  http_options: List(Dynamic),
-  // Omitted, no need
-  options: List(Dynamic)
+  method: http.Method,
+  request: #(Charlist, List(#(Charlist, Charlist)), Charlist, Charlist),
+  http_options: List(ErlHttpOption),
+  options: List(ErlOption)
 ) -> Result(HttpOk, HttpError)
-
-type HttpOk = #(#(String, Int, String), List(#(String, String)), String)
-type HttpError = Dynamic
 
 type HttpClient {
   HttpClient(

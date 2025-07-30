@@ -75,12 +75,28 @@ fn post_erl(
 type HttpClient {
   HttpClient(
     to: Charlist,
+    config: Configuration,
     headers: List(#(Charlist, Charlist)),
+    erl_http_options: List(ErlHttpOption),
+    erl_options: List(ErlOption),
   )
 }
 
-fn get(client: HttpClient) -> Result(HttpOk, HttpError) {
-  get_erl(atom.create("get"), #(client.to, client.headers), [], [])
+pub opaque type Configuration {
+  Builder(
+    // Default to true, unless explicitly set
+    verify_tls: Bool,
+
+    follow_redirects: Bool,
+    timeout: Int,
+  )
+}
+
+/// Default client configuration
+pub fn configure() -> Configuration {
+  Builder(verify_tls: True, follow_redirects: False, timeout: 15_000)
+}
+
 }
 
 // WIP

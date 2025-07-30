@@ -14,7 +14,7 @@ pub fn client_get_test() {
   |> get()
 
 
-  let assert Ok(body) = bit_array.to_string(resp.body)
+  let assert Ok(_body) = bit_array.to_string(resp.body)
 }
 
 pub fn client_post_test() {
@@ -24,6 +24,6 @@ pub fn client_post_test() {
   |> to("https://test-api.service.hmrc.gov.uk/hello/world")
   |> post("{ \"hello\": \"world\" }")
 
-  let assert Ok(body) = bit_array.to_string(resp.body)
+  let assert Ok(_body) = bit_array.to_string(resp.body)
 }
 

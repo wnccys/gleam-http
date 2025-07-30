@@ -1,5 +1,3 @@
-/// OUR OWN GLEAM HTTP CLIENT
-
 import gleam/result
 import gleam/list
 import gleam/http

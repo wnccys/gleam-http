@@ -168,32 +168,34 @@ fn string_headers(header: #(Charlist, Charlist)) -> #(String, String) {
   #(charlist.to_string(k), charlist.to_string(v))
 }
 
+// ================================================================================================================================
+// TEST FUNCTIONS - Inspirado nos tests do spibola 
+//  ================================================================================================================================
+
 pub fn main() {
-  let client = new()
+  req_get()
+  req_post()
+}
+
+fn req_get() {
+  let assert Ok(resp) = new()
   |> set_header("accept", "application/vnd.hmrc.1.0+json")
-  |> set_header("content-type", "text/html")
-  // change compat test
   |> set_header("content-type", "application/json")
   |> to("https://test-api.service.hmrc.gov.uk/hello/world")
   |> get()
 
-  io.println(string.inspect(client))
+  let assert Ok(body) = bit_array.to_string(resp.body)
+
+  io.println(body)
 }
 
-pub fn configure() -> Configuration {
-  Builder(verify_tls: True, follow_redirects: False, timeout: 30_000)
+fn req_post() {
+  let assert Ok(resp) = new()
+  |> set_header("accept", "*/*")
+  |> set_header("content-type", "application/json")
+  |> to("https://test-api.service.hmrc.gov.uk/hello/world")
+  |> post("{ \"hello\": \"world\" }")
+
+  let assert Ok(body) = bit_array.to_string(resp.body)
+  io.println(body)
 }
-
-pub opaque type Configuration {
-  Builder(
-    // Default to true, unless explicitly set
-    verify_tls: Bool,
-    follow_redirects: Bool,
-    timeout: Int,
-  )
-}
-
-// ================================================================================================================================
-// TEST FUNCTIONS - Inspirado nos tests do spibola -> TODO
-//  ================================================================================================================================
-

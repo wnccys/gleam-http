@@ -7,7 +7,6 @@ import gleam/erlang/atom
 import gleam/dynamic.{type Dynamic}
 
 // Base FFI erlang compat types
-
 type ErlHttpOption {
   Ssl(List(ErlSslOption))
   Autoredirect(Bool)
@@ -25,7 +24,6 @@ type ErlOption {
 
 type SocketOpt {
   Ipfamily(Inet6fb4)
-
 }
 
 type Inet6fb4 {

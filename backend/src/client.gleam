@@ -97,11 +97,41 @@ pub fn configure() -> Configuration {
   Builder(verify_tls: True, follow_redirects: False, timeout: 15_000)
 }
 
+fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {
+  let assert Ok(resp) = 
+    get_erl(
+      http.Get,
+      #(client.to, client.headers),
+      client.erl_http_options,
+      client.erl_options
+    )
+
+  let #(#(_version, status, _status), headers, body) = resp
+  Ok(Response(status, list.map(headers, string_headers), body))
 }
 
-// WIP
-fn post(client: HttpClient, body: String) -> Result(HttpOk, HttpError) {
-  post_erl(atom.create("post"), #(client.to, client.headers, "cnt-type", body), [], [])
+fn post(client: HttpClient, body: String) -> Result(Response(BitArray), HttpError) {
+    let content_type = 
+        list.find(
+          client.headers,
+          fn(header) {
+            let #(k, _) = header
+
+            charlist.to_string(k) == "Content-Type" || charlist.to_string(k) == "content-type"
+        })
+        |> result.try(fn(header) { let #(_, v) = header Ok(v) })
+        |> result.unwrap(charlist.from_string("application/json"))
+
+    let assert Ok(resp) = 
+      post_erl(
+        http.Post,
+        #(client.to, client.headers, content_type, charlist.from_string(body)),
+        client.erl_http_options,
+        client.erl_options
+      )
+
+    let #(#(_version, status, _status), headers, body) = resp
+    Ok(Response(status, list.map(headers, string_headers), body))
 }
 
 fn new() -> HttpClient {

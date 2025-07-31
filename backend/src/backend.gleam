@@ -5,6 +5,8 @@ import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import mist.{type Connection, type ResponseData}
 import router.{type Router, get, handle_request, post}
+// Tests can be imported and used in-demand just like this
+// import backend_test.{http_methods_test}
 
 pub fn main() {
   let _error =
@@ -36,7 +38,7 @@ fn payment_routes(router: Router) -> Router {
       mist.ResponseData,
     ) {
       response.new(200)
-      |> response.set_body(mist.Bytes(bytes_tree.new()))
+      |> response.set_body(mist.Bytes(bytes_tree.from_string("{ \"hello\": \"world\" }")))
     },
   )
   |> get(

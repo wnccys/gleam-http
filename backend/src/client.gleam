@@ -80,7 +80,6 @@ pub opaque type Configuration {
   Builder(
     // Default to true, unless explicitly set
     verify_tls: Bool,
-
     follow_redirects: Bool,
     timeout: Int,
   )
@@ -92,7 +91,7 @@ pub fn configure() -> Configuration {
 }
 
 pub fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {
-  let assert Ok(resp) = 
+  let assert Ok(resp) =
     get_erl(
       http.Get,
       #(client.to, client.headers),
@@ -105,7 +104,7 @@ pub fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {
 }
 
 pub fn post(client: HttpClient, body: String) -> Result(Response(BitArray), HttpError) {
-    let content_type = 
+    let content_type =
         list.find(
           client.headers,
           fn(header) {
@@ -116,7 +115,7 @@ pub fn post(client: HttpClient, body: String) -> Result(Response(BitArray), Http
         |> result.try(fn(header) { let #(_, v) = header Ok(v) })
         |> result.unwrap(charlist.from_string("application/json"))
 
-    let assert Ok(resp) = 
+    let assert Ok(resp) =
       post_erl(
         http.Post,
         #(client.to, client.headers, content_type, charlist.from_string(body)),

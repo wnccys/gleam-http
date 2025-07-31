@@ -87,7 +87,7 @@ pub opaque type Configuration {
 
 /// Default client configuration
 pub fn configure() -> Configuration {
-  Builder(verify_tls: True, follow_redirects: False, timeout: 15_000)
+  Builder(verify_tls: True, follow_redirects: False, timeout: 30_000)
 }
 
 pub fn get(client: HttpClient) -> Result(Response(BitArray), HttpError) {

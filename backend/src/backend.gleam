@@ -1,8 +1,6 @@
 import gleam/string
 import logging
-import gleam/io
 import gleam/bytes_tree
-import gleam/dict.{type Dict}
 import gleam/erlang/process
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
@@ -26,9 +24,10 @@ pub fn main() {
   let assert Ok(_) =
     fn(req: Request(Connection)) -> Response(ResponseData) {
       logging.log(
-      logging.Info,
-      "Got a request from: " <> string.inspect(mist.get_client_info(req.body)) <> "for" <> req.path,
-  )
+        logging.Info,
+          "Got a request from: " <> string.inspect(mist.get_client_info(req.body)) <>
+          " for: " <> req.path <> " " <> string.inspect(req.method),
+      )
       router |> handle_request(req)
     }
     |> mist.new
@@ -43,22 +42,27 @@ fn payment_routes(router: Router) -> Router {
   router
   |> post(
     "payments",
-    fn(_req: Request(Connection), _params: Dict(String, String)) -> Response(
-      mist.ResponseData,
-    ) {
+    fn(_req, _params) {
       response.new(200)
       |> response.set_body(mist.Bytes(bytes_tree.from_string("{ \"hello\": \"world\" }")))
     },
   )
   |> get(
     "payments-summary",
-    fn(_req: Request(Connection), _params: Dict(String, String)) -> Response(
-      mist.ResponseData,
-    ) {
+    fn(_req, _params) {
       response.new(200)
       |> response.set_body(mist.Bytes(bytes_tree.from_string("
         { \"default\" : { \"totalRequests\": 43236, \"totalAmount\": 415542345.98 }, \"fallback\" : { \"totalRequests\": 423545, \"totalAmount\": 329347.34 } }
       ")))
     },
+  )
+  // This is a *secret* endpoint not specified on rinha's specification but it is used by k6 and it counts as a failing request if not implemented
+  // 
+  |> post(
+    "purge-payments",
+    fn(_, _) {
+      response.new(200)
+      |> response.set_body(mist.Bytes(bytes_tree.new()))
+    }
   )
 }

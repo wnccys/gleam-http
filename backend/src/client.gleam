@@ -86,7 +86,7 @@ pub opaque type Configuration {
 }
 
 /// Default client configuration
-pub fn configure() -> Configuration {
+fn configure() -> Configuration {
   Builder(verify_tls: True, follow_redirects: False, timeout: 30_000)
 }
 
